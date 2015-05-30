@@ -54,6 +54,7 @@ class ViewController: UIViewController {
         setupFirstContainer(self.firstContainer)
         setupSecondContainer(self.secondContainer)
         setupThirdContainer(self.thirdContainer)
+        setupFourthContainer(self.fourthContainer)
     }
     
     override func didReceiveMemoryWarning() {
@@ -83,7 +84,7 @@ class ViewController: UIViewController {
         self.youHaveLabel = UILabel(frame: CGRect( x: containerView.bounds.origin.x, y: containerView.bounds.origin.y * kThird, width: containerView.frame.width * kHalf, height: containerView.frame.height * kThird))
         self.youHaveLabel.text = "You have:"
         self.youHaveLabel.textColor = UIColor.redColor()
-        self.youHaveLabel.font = UIFont(name: "Arial-BoldMT", size: 18)
+        self.youHaveLabel.font = UIFont(name: "Arial", size: 18)
         self.youHaveLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.youHaveLabel)
     }
@@ -92,23 +93,40 @@ class ViewController: UIViewController {
         self.stepOneLabel = UILabel(frame: CGRect( x: containerView.bounds.origin.x, y: containerView.bounds.origin.y * kThird, width: containerView.frame.width, height: containerView.frame.height * kThird))
         self.stepOneLabel.text = "Step 1: Purchase Supplies"
         self.stepOneLabel.textColor = UIColor.blueColor()
-        self.stepOneLabel.font = UIFont(name: "Arial-BoldMT", size: 18)
+        self.stepOneLabel.font = UIFont(name: "Arial", size: 18)
         self.stepOneLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.stepOneLabel)
+        
+        self.lemondsPriceLabel = UILabel(frame: CGRect(x: containerView.bounds.origin.x, y: containerView.frame.height * kThird, width: containerView.frame.width * kHalf, height: containerView.frame.height * kThird))
+        self.lemondsPriceLabel.text = "Lemons for $2:"
+        self.lemondsPriceLabel.textColor = UIColor.blackColor()
+        self.lemondsPriceLabel.font = UIFont(name: "Arial", size: 18)
+        self.lemondsPriceLabel.textAlignment = NSTextAlignment.Right
+        self.lemondsPriceLabel.backgroundColor = UIColor.whiteColor()
+        containerView.addSubview(self.lemondsPriceLabel)
+        
+        self.iceCubesPriceLabel = UILabel(frame: CGRect(x: containerView.bounds.origin.x, y: containerView.frame.height * ( 2 * kThird), width: containerView.frame.width * kHalf, height: containerView.frame.height * kThird))
+        self.iceCubesPriceLabel.text = "Ice Cubes for $1:"
+        self.iceCubesPriceLabel.textColor = UIColor.blackColor()
+        self.iceCubesPriceLabel.font = UIFont(name: "Arial", size: 18)
+        self.iceCubesPriceLabel.textAlignment = NSTextAlignment.Right
+        self.iceCubesPriceLabel.backgroundColor = UIColor.whiteColor()
+        containerView.addSubview(self.iceCubesPriceLabel)
+
     }
     
     func setupThirdContainer(containerView: UIView){
         self.stepTwoLabel = UILabel(frame: CGRect( x: containerView.bounds.origin.x, y: containerView.bounds.origin.y * kQuarter, width: containerView.frame.width, height: containerView.frame.height * kQuarter))
         self.stepTwoLabel.text = "Step 2: Mix your lemonade"
         self.stepTwoLabel.textColor = UIColor.blueColor()
-        self.stepTwoLabel.font = UIFont(name: "Arial-BoldMT", size: 18)
+        self.stepTwoLabel.font = UIFont(name: "Arial", size: 18)
         self.stepTwoLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.stepTwoLabel)
         
         self.mixInstructionsLabel = UILabel(frame: CGRect(x: containerView.frame.width * kQuarter, y: containerView.frame.height * kQuarter, width: containerView.frame.width * (3 * kQuarter), height: containerView.frame.height * kQuarter))
         self.mixInstructionsLabel.text = "Do your customers prefer more ice or more lemon today?"
         self.mixInstructionsLabel.textColor = UIColor.blackColor()
-        self.mixInstructionsLabel.font = UIFont(name: "Arial-BoldMT", size: 15)
+        self.mixInstructionsLabel.font = UIFont(name: "Arial", size: 15)
         self.mixInstructionsLabel.backgroundColor = UIColor.whiteColor()
         self.mixInstructionsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         self.mixInstructionsLabel.numberOfLines = 2
@@ -117,7 +135,7 @@ class ViewController: UIViewController {
         self.mixLemonsLabel = UILabel(frame: CGRect(x: containerView.frame.width * kSixth, y: containerView.frame.height * ( 2 * kQuarter), width: containerView.frame.width * kThird, height: containerView.frame.height * kQuarter))
         self.mixLemonsLabel.text = "Lemons:"
         self.mixLemonsLabel.textColor = UIColor.blackColor()
-        self.mixLemonsLabel.font = UIFont(name: "Arial-BoldMT", size: 18)
+        self.mixLemonsLabel.font = UIFont(name: "Arial", size: 18)
         self.mixLemonsLabel.textAlignment = NSTextAlignment.Right
         self.mixLemonsLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.mixLemonsLabel)
@@ -125,11 +143,29 @@ class ViewController: UIViewController {
         self.mixIceCubesLabel = UILabel(frame: CGRect(x: containerView.frame.width * kSixth, y: containerView.frame.height * ( 3 * kQuarter), width: containerView.frame.width * kThird, height: containerView.frame.height * kQuarter))
         self.mixIceCubesLabel.text = "Ice Cubes:"
         self.mixIceCubesLabel.textColor = UIColor.blackColor()
-        self.mixIceCubesLabel.font = UIFont(name: "Arial-BoldMT", size: 18)
+        self.mixIceCubesLabel.font = UIFont(name: "Arial", size: 18)
         self.mixIceCubesLabel.textAlignment = NSTextAlignment.Right
         self.mixIceCubesLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.mixIceCubesLabel)
-
     }
+    
+    func setupFourthContainer(containerView: UIView){
+        self.stepThreeLabel = UILabel(frame: CGRect( x: containerView.bounds.origin.x, y: containerView.bounds.origin.y, width: containerView.frame.width, height: containerView.frame.height * kQuarter))
+        self.stepThreeLabel.text = "Step 3: Start selling your brew"
+        self.stepThreeLabel.textColor = UIColor.blueColor()
+        self.stepThreeLabel.font = UIFont(name: "Arial", size: 18)
+        self.stepThreeLabel.backgroundColor = UIColor.whiteColor()
+        containerView.addSubview(self.stepThreeLabel)
+        
+        self.instructionsLabel = UILabel(frame: CGRect( x: containerView.frame.width * kQuarter, y: containerView.frame.height * kQuarter, width: containerView.frame.width * ( 2 * kThird), height: containerView.frame.height * (3 * kEighth)))
+        self.instructionsLabel.text = "At the end of the day you will either make or lose money. If you don't have enough money to buy new inventory then you lose the game."
+        self.instructionsLabel.textColor = UIColor.blackColor()
+        self.instructionsLabel.font = UIFont(name: "Arial", size: 13)
+        self.instructionsLabel.backgroundColor = UIColor.whiteColor()
+        self.instructionsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        self.instructionsLabel.numberOfLines = 4
+        containerView.addSubview(self.instructionsLabel)
+    }
+
 }
 
