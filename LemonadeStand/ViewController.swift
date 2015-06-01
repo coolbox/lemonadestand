@@ -198,8 +198,8 @@ class ViewController: UIViewController {
     }
     
     func startDayButtonPressed (button: UIButton) {
-        println("startDayButtonPressed")
-        println(button)
+        var lemonadeMix = LemonadeBrain.mix(lemonsMix, iceCubes: iceCubesMix)
+        Factory.createCustomers()
     }
 
     func setupFirstContainer(containerView: UIView){
