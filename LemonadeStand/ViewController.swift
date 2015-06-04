@@ -60,11 +60,11 @@ class ViewController: UIViewController {
     var credits = 10
     var lemons = 1
     var iceCubes = 1
-    var winnings = 0
     var lemonsBought = 0
     var iceCubesBought = 0
     var lemonsMix = 0
     var iceCubesMix = 0
+    var currentDay = 0
 
     //  Prices
     let priceOfLemon = 2
@@ -198,8 +198,30 @@ class ViewController: UIViewController {
     }
     
     func startDayButtonPressed (button: UIButton) {
-        var lemonadeMix = LemonadeBrain.mix(lemonsMix, iceCubes: iceCubesMix)
-        Factory.createCustomers()
+        if lemonsMix > 0 || iceCubesMix > 0 {
+            // Increment Day
+            currentDay += 1
+            println("DAY: \(currentDay)")
+
+            var lemonadeMix = LemonadeBrain.mix(lemonsMix, iceCubes: iceCubesMix)
+            println("Today's Mix: \(lemonadeMix)")
+            
+            var customers = Factory.createCustomers()
+            var earnings = LemonadeBrain.computeEarnings(customers, mix: lemonadeMix)
+            
+            // Increment earnings
+            credits += earnings
+            lemonsBought = 0
+            iceCubesBought = 0
+            lemonsMix = 0
+            iceCubesMix = 0
+            
+            updateTopLabels()
+            updateStep1Labels()
+            updateStep2Labels()
+        } else {
+            showAlertWithText(header: "No lemonade?!", message: "You need to mix some ingredients to make lemonade!")
+        }
     }
 
     func setupFirstContainer(containerView: UIView){
@@ -579,7 +601,7 @@ class ViewController: UIViewController {
         self.startDayButton.addTarget(self, action: "startDayButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.startDayButton)
     }
-
+    
     func updateTopLabels () {
         self.moneyLabel.text = "$\(credits)"
         self.totalLemonsLabel.text = "\(lemons) Lemon(s)"

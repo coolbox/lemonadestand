@@ -7,20 +7,45 @@
 //
 
 import Foundation
+import UIKit
 
 class LemonadeBrain {
     
-    class func mix (lemons: Int, iceCubes: Int) -> Float {
-        var ratio = Float(lemons) / Float(iceCubes)
+    class func mix (lemons: Int, iceCubes: Int) -> CGFloat {
+        // Round the lemonade mix to 1 decimal place
+        // Keeps it easy for matching!
+        let divisor = pow(10.0, CGFloat(1))
+
+        var ratio = CGFloat(lemons) / CGFloat(iceCubes)
+        ratio = round(ratio * divisor) / divisor
+        
         return ratio
     }
-    
+
     // Example
-//    class func computeEarnings (customers: [Customer], mix: Float) -> Int {
-//        for customer in mix {
-//            if customer.tastePreference < 0.4 && LemonadeBrain.mix
-//        }
-//        
-//        return 0
-//    }
+    // For example, If customerPreference is Less than 0.4 
+    // AND lemonadeRatio is Greater than 1... 
+    // Get paid a $1 and print out "Paid!"
+    class func computeEarnings (customers: [Customer], mix: CGFloat) -> Int {
+        var earnings = 0
+        
+        for customer in customers {
+            var preference = customer.tastePreference
+            
+            if preference < 0.4 && mix > 1.0 {
+                earnings += 1
+                println("PAID - Customer Taste: \(preference)")
+            } else if preference >= 0.4 && preference <= 0.6 && mix == 1.0 {
+                earnings += 1
+                println("PAID - Customer Taste: \(preference)")
+            } else if preference > 0.6 && mix < 1.0  {
+                earnings += 1
+                println("PAID - Customer Taste: \(preference)")
+            } else {
+                println("NO MATCH, NO REVENUE - Customer Taste: \(preference)")
+            }
+        }
+        
+        return earnings
+    }
 }
