@@ -11,7 +11,7 @@ import UIKit
 
 class Factory {
     class func createCustomers () -> [Customer] {
-        var numberOfCustomers = self.numberOfCustomers(10)
+        var numberOfCustomers = self.numberOfCustomers(20)
         var customerArray:[Customer] = []
         
         for index in 1...numberOfCustomers {

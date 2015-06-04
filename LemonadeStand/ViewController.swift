@@ -141,7 +141,7 @@ class ViewController: UIViewController {
     }
     
     func minusIceCubesBuyButtonPressed (button: UIButton) {
-        if iceCubesBought <= 0 && iceCubes > 0 {
+        if iceCubesBought <= 0 {
             showAlertWithText(header: "No more ice cubes ", message: "Nothing left to refund!")
         } else if iceCubesBought > 0 && iceCubes == 0 {
             showAlertWithText(header: "No more ice cubes ", message: "You've mixed all your ice cubes!")
