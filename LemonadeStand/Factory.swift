@@ -10,8 +10,23 @@ import Foundation
 import UIKit
 
 class Factory {
-    class func createCustomers () -> [Customer] {
-        var numberOfCustomers = self.numberOfCustomers(20)
+    class func createCustomers (weather: String) -> [Customer] {
+        var customerRange:Int
+        customerRange = 20
+        
+        switch weather {
+            case "Cold":
+                customerRange -= Int(arc4random_uniform(UInt32(10)))
+            case "Mild":
+                customerRange += Int(arc4random_uniform(UInt32(2)))
+            case "Warm":
+                customerRange += Int(arc4random_uniform(UInt32(30)))
+            default:
+                customerRange += 0
+        }
+        
+        var numberOfCustomers = self.numberOfCustomers(customerRange)
+        println("Number of customers: \(customerRange)")
         var customerArray:[Customer] = []
         
         for index in 1...numberOfCustomers {
@@ -36,5 +51,13 @@ class Factory {
         customerTastePreference = round(customerTastePreference * divisor) / divisor
         
         return customerTastePreference
+    }
+    
+    class func todaysWeather () -> String {
+        var weathers = ["Cold", "Mild", "Warm"]
+        var randomNumber = Int(arc4random_uniform(UInt32(weathers.count)))
+        var weather = weathers[randomNumber]
+        
+        return weather
     }
 }

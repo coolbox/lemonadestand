@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     var moneyLabel: UILabel!
     var totalLemonsLabel: UILabel!
     var totalIceCubesLabel: UILabel!
+    var todaysWeatherLabel: UILabel!
+    var weatherIconImageView = UIImageView()
     
     //  Step 1
     var stepOneLabel: UILabel!
@@ -65,6 +67,7 @@ class ViewController: UIViewController {
     var lemonsMix = 0
     var iceCubesMix = 0
     var currentDay = 0
+    var currentWeather: String!
 
     //  Prices
     let priceOfLemon = 2
@@ -73,7 +76,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        // Setup current weather
         setupContainerViews()
+        generateWeather()
         setupFirstContainer(self.firstContainer)
         setupSecondContainer(self.secondContainer)
         setupThirdContainer(self.thirdContainer)
@@ -87,19 +93,19 @@ class ViewController: UIViewController {
     
     func setupContainerViews() {
         self.firstContainer = UIView(frame: CGRect(x: self.view.bounds.origin.x + kMarginForView, y: self.view.bounds.origin.y, width: self.view.bounds.width - (kMarginForView * 2), height: self.view.bounds.height / 4))
-        self.firstContainer.backgroundColor = UIColor.blackColor()
+        self.firstContainer.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(self.firstContainer)
         
         self.secondContainer = UIView(frame: CGRect(x: self.view.bounds.origin.x + kMarginForView, y: self.view.bounds.height * kQuarter, width: self.view.bounds.width - (kMarginForView * 2), height: self.view.bounds.height / 4))
-        self.secondContainer.backgroundColor = UIColor.greenColor()
+        self.secondContainer.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(self.secondContainer)
         
         self.thirdContainer = UIView(frame: CGRect(x: self.view.bounds.origin.x + kMarginForView, y: self.view.bounds.height * (2 * kQuarter), width: self.view.bounds.width - (kMarginForView * 2), height: self.view.bounds.height / 4))
-        self.thirdContainer.backgroundColor = UIColor.blackColor()
+        self.thirdContainer.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(self.thirdContainer)
         
         self.fourthContainer = UIView(frame: CGRect(x: self.view.bounds.origin.x + kMarginForView, y: self.view.bounds.height * (3 * kQuarter), width: self.view.bounds.width - (kMarginForView * 2), height: self.view.bounds.height / 4))
-        self.fourthContainer.backgroundColor = UIColor.greenColor()
+        self.fourthContainer.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(self.fourthContainer)
     }
     
@@ -206,7 +212,7 @@ class ViewController: UIViewController {
             var lemonadeMix = LemonadeBrain.mix(lemonsMix, iceCubes: iceCubesMix)
             println("Today's Mix: \(lemonadeMix)")
             
-            var customers = Factory.createCustomers()
+            var customers = Factory.createCustomers(currentWeather)
             var earnings = LemonadeBrain.computeEarnings(customers, mix: lemonadeMix)
             
             // Increment earnings
@@ -217,6 +223,7 @@ class ViewController: UIViewController {
             iceCubesMix = 0
             
             updateTopLabels()
+            generateWeather()
             updateStep1Labels()
             updateStep2Labels()
         } else {
@@ -230,7 +237,7 @@ class ViewController: UIViewController {
                 x: containerView.bounds.origin.x * kHalf,
                 y: containerView.bounds.origin.y,
                 width: containerView.frame.width * (3 * kEighth),
-                height: containerView.frame.height * kThird
+                height: containerView.frame.height * kQuarter
             )
         )
         self.youHaveLabel.text = "You have:"
@@ -244,7 +251,7 @@ class ViewController: UIViewController {
                 x: containerView.frame.width * (3 * kEighth),
                 y: containerView.bounds.origin.y,
                 width: containerView.frame.width * (5 * kEighth),
-                height: containerView.frame.height * kThird
+                height: containerView.frame.height * kQuarter
             )
         )
         self.moneyLabel.text = "$10"
@@ -253,31 +260,57 @@ class ViewController: UIViewController {
         self.moneyLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.moneyLabel)
         
+        self.todaysWeatherLabel = UILabel(
+            frame: CGRect(
+                x: containerView.bounds.origin.x,
+                y: containerView.frame.height * (2 * kEighth),
+                width: containerView.frame.width * (3 * kEighth),
+                height: containerView.frame.height * (2 * kEighth)
+            )
+        )
+        self.todaysWeatherLabel.text = "Today's Weather: "
+        self.todaysWeatherLabel.textColor = UIColor.blackColor()
+        self.todaysWeatherLabel.font = UIFont(name: "Arial", size: 14)
+        self.todaysWeatherLabel.backgroundColor = UIColor.whiteColor()
+        containerView.addSubview(self.todaysWeatherLabel)
+        
+        // Weather icon
+        var weatherIconImageView = UIImageView()
+        weatherIconImageView.image = UIImage(named: currentWeather)
+        weatherIconImageView.backgroundColor = UIColor.whiteColor()
+        weatherIconImageView.frame = CGRect(
+            x: self.firstContainer.frame.width * (3 * kEighth),
+            y: self.firstContainer.frame.height * (2 * kEighth),
+            width: 29,
+            height: 29
+        )
+        self.firstContainer.addSubview(weatherIconImageView)
+        
         self.totalLemonsLabel = UILabel(
             frame: CGRect(
                 x: containerView.frame.width * (3 * kEighth),
-                y: containerView.frame.height * kThird,
+                y: containerView.frame.height * (4 * kEighth),
                 width: containerView.frame.width * (5 * kEighth),
-                height: containerView.frame.height * kThird
+                height: containerView.frame.height * (2 * kEighth)
             )
         )
         self.totalLemonsLabel.text = "1 Lemon(s)"
         self.totalLemonsLabel.textColor = UIColor.blackColor()
-        self.totalLemonsLabel.font = UIFont(name: "Arial", size: 18)
+        self.totalLemonsLabel.font = UIFont(name: "Arial", size: 14)
         self.totalLemonsLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.totalLemonsLabel)
         
         self.totalIceCubesLabel = UILabel(
             frame: CGRect(
                 x: containerView.frame.width * (3 * kEighth),
-                y: containerView.frame.height * (2 * kThird),
+                y: containerView.frame.height * (6 * kEighth),
                 width: containerView.frame.width * (5 * kEighth),
-                height: containerView.frame.height * kThird
+                height: containerView.frame.height * (2 * kEighth)
             )
         )
         self.totalIceCubesLabel.text = "1 Ice Cube(s)"
         self.totalIceCubesLabel.textColor = UIColor.blackColor()
-        self.totalIceCubesLabel.font = UIFont(name: "Arial", size: 18)
+        self.totalIceCubesLabel.font = UIFont(name: "Arial", size: 14)
         self.totalIceCubesLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.totalIceCubesLabel)
     }
@@ -325,7 +358,7 @@ class ViewController: UIViewController {
         self.plusLemonsBuyButton.setTitle("+", forState: UIControlState.Normal)
         self.plusLemonsBuyButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.plusLemonsBuyButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.plusLemonsBuyButton.backgroundColor = UIColor.redColor()
+        self.plusLemonsBuyButton.backgroundColor = UIColor.whiteColor()
         self.plusLemonsBuyButton.addTarget(self, action: "plusLemonsBuyButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.plusLemonsBuyButton)
         
@@ -341,7 +374,7 @@ class ViewController: UIViewController {
         self.minusLemonsBuyButton.setTitle("-", forState: UIControlState.Normal)
         self.minusLemonsBuyButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.minusLemonsBuyButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.minusLemonsBuyButton.backgroundColor = UIColor.redColor()
+        self.minusLemonsBuyButton.backgroundColor = UIColor.whiteColor()
         self.minusLemonsBuyButton.addTarget(self, action: "minusLemonsBuyButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.minusLemonsBuyButton)
         
@@ -358,7 +391,7 @@ class ViewController: UIViewController {
         self.purchaseLemonsLabel.textColor = UIColor.blackColor()
         self.purchaseLemonsLabel.font = UIFont(name: "Arial", size: 20)
         self.purchaseLemonsLabel.textAlignment = NSTextAlignment.Center
-        self.purchaseLemonsLabel.backgroundColor = UIColor.greenColor()
+        self.purchaseLemonsLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.purchaseLemonsLabel)
         
         // Buy ice cubes
@@ -373,7 +406,7 @@ class ViewController: UIViewController {
         self.plusIceCubesBuyButton.setTitle("+", forState: UIControlState.Normal)
         self.plusIceCubesBuyButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.plusIceCubesBuyButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.plusIceCubesBuyButton.backgroundColor = UIColor.redColor()
+        self.plusIceCubesBuyButton.backgroundColor = UIColor.whiteColor()
         self.plusIceCubesBuyButton.addTarget(self, action: "plusIceCubesBuyButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.plusIceCubesBuyButton)
         
@@ -389,7 +422,7 @@ class ViewController: UIViewController {
         self.minusIceCubesBuyButton.setTitle("-", forState: UIControlState.Normal)
         self.minusIceCubesBuyButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.minusIceCubesBuyButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.minusIceCubesBuyButton.backgroundColor = UIColor.redColor()
+        self.minusIceCubesBuyButton.backgroundColor = UIColor.whiteColor()
         self.minusIceCubesBuyButton.addTarget(self, action: "minusIceCubesBuyButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.minusIceCubesBuyButton)
         
@@ -406,7 +439,7 @@ class ViewController: UIViewController {
         self.purchaseIceCubesLabel.textColor = UIColor.blackColor()
         self.purchaseIceCubesLabel.font = UIFont(name: "Arial", size: 20)
         self.purchaseIceCubesLabel.textAlignment = NSTextAlignment.Center
-        self.purchaseIceCubesLabel.backgroundColor = UIColor.greenColor()
+        self.purchaseIceCubesLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.purchaseIceCubesLabel)
     }
     
@@ -476,7 +509,7 @@ class ViewController: UIViewController {
         self.plusLemonsMixButton.setTitle("+", forState: UIControlState.Normal)
         self.plusLemonsMixButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.plusLemonsMixButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.plusLemonsMixButton.backgroundColor = UIColor.redColor()
+        self.plusLemonsMixButton.backgroundColor = UIColor.whiteColor()
         self.plusLemonsMixButton.addTarget(self, action: "plusLemonsMixButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.plusLemonsMixButton)
         
@@ -492,7 +525,7 @@ class ViewController: UIViewController {
         self.minusLemonsMixButton.setTitle("-", forState: UIControlState.Normal)
         self.minusLemonsMixButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.minusLemonsMixButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.minusLemonsMixButton.backgroundColor = UIColor.redColor()
+        self.minusLemonsMixButton.backgroundColor = UIColor.whiteColor()
         self.minusLemonsMixButton.addTarget(self, action: "minusLemonsMixButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.minusLemonsMixButton)
         
@@ -509,7 +542,7 @@ class ViewController: UIViewController {
         self.mixLemonsNumberLabel.textColor = UIColor.blackColor()
         self.mixLemonsNumberLabel.font = UIFont(name: "Arial", size: 20)
         self.mixLemonsNumberLabel.textAlignment = NSTextAlignment.Center
-        self.mixLemonsNumberLabel.backgroundColor = UIColor.greenColor()
+        self.mixLemonsNumberLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.mixLemonsNumberLabel)
         
         // Plus ice cubes
@@ -524,7 +557,7 @@ class ViewController: UIViewController {
         self.plusIceCubesMixButton.setTitle("+", forState: UIControlState.Normal)
         self.plusIceCubesMixButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.plusIceCubesMixButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.plusIceCubesMixButton.backgroundColor = UIColor.redColor()
+        self.plusIceCubesMixButton.backgroundColor = UIColor.whiteColor()
         self.plusIceCubesMixButton.addTarget(self, action: "plusIceCubesMixButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.plusIceCubesMixButton)
         
@@ -540,7 +573,7 @@ class ViewController: UIViewController {
         self.minusIceCubesMixButton.setTitle("-", forState: UIControlState.Normal)
         self.minusIceCubesMixButton.setTitleColor(UIColor.blueColor(), forState: UIControlState.Normal)
         self.minusIceCubesMixButton.titleLabel?.font = UIFont(name: "Arial", size: 30)
-        self.minusIceCubesMixButton.backgroundColor = UIColor.redColor()
+        self.minusIceCubesMixButton.backgroundColor = UIColor.whiteColor()
         self.minusIceCubesMixButton.addTarget(self, action: "minusIceCubesMixButtonPressed:", forControlEvents: UIControlEvents.TouchUpInside)
         containerView.addSubview(self.minusIceCubesMixButton)
         
@@ -557,7 +590,7 @@ class ViewController: UIViewController {
         self.mixIceCubesNumberLabel.textColor = UIColor.blackColor()
         self.mixIceCubesNumberLabel.font = UIFont(name: "Arial", size: 20)
         self.mixIceCubesNumberLabel.textAlignment = NSTextAlignment.Center
-        self.mixIceCubesNumberLabel.backgroundColor = UIColor.greenColor()
+        self.mixIceCubesNumberLabel.backgroundColor = UIColor.whiteColor()
         containerView.addSubview(self.mixIceCubesNumberLabel)
     }
     
@@ -606,6 +639,7 @@ class ViewController: UIViewController {
         self.moneyLabel.text = "$\(credits)"
         self.totalLemonsLabel.text = "\(lemons) Lemon(s)"
         self.totalIceCubesLabel.text = "\(iceCubes) Ice Cube(s)"
+        
     }
     
     func updateStep1Labels () {
@@ -628,6 +662,21 @@ class ViewController: UIViewController {
         var alert = UIAlertController(title: header, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func generateWeather () {
+        self.currentWeather = Factory.todaysWeather()
+        println("Weather: \(currentWeather)")
+        
+        self.weatherIconImageView.image = UIImage(named: currentWeather)
+        self.weatherIconImageView.backgroundColor = UIColor.whiteColor()
+        self.weatherIconImageView.frame = CGRect(
+            x: self.firstContainer.frame.width * (3 * kEighth),
+            y: self.firstContainer.frame.height * (2 * kEighth),
+            width: 29,
+            height: 29
+        )
+        self.firstContainer.addSubview(weatherIconImageView)
     }
 }
 
